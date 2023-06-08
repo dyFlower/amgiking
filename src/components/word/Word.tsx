@@ -1,7 +1,5 @@
 import { TextInput, TouchableOpacity, View, Text, ScrollView, Alert } from 'react-native';
-
 import { Fontisto } from '@expo/vector-icons';
-
 import { theme } from '../../styles/color';
 import { useEffect, useRef, useState } from 'react';
 import { styles, scrollstyles } from './styles';
@@ -38,7 +36,7 @@ export default function Word() {
     }
     const newWordMean: WordMean = {
       ...wordMean,
-      [Date.now()]: { word, mean, wordPress: false, meanPress: false },
+      [Date.now()]: { word, mean, wordPress: false, meanPress: true },
     };
     setWordMean(newWordMean);
     await saveWordMean(newWordMean);
