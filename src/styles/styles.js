@@ -12,6 +12,7 @@ export const styles = StyleSheet.create({
     marginTop: 70,
     marginBottom: 15,
     justifyContent: 'space-between',
+    paddingHorizontal: 20,
   },
   btnText: { fontSize: 40, fontWeight: '700' },
 });
