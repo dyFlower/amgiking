@@ -1,21 +1,14 @@
-import {
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  View,
-  Text,
-  ScrollView,
-  Alert,
-} from 'react-native';
+import { TextInput, TouchableOpacity, View, Text, ScrollView, Alert } from 'react-native';
 
 import { Fontisto } from '@expo/vector-icons';
 
 import { theme } from '../../styles/color';
 import { useEffect, useState } from 'react';
+import { styles, scrollstyles } from './styles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface WordMean {
-  [key: string]: { word: string; mean: string };
+  [key: string]: { word: string; mean: string; wordPress: boolean; meanPress: boolean };
 }
 
 export default function Word() {
@@ -43,7 +36,10 @@ export default function Word() {
     if (word === '' || mean === '') {
       return;
     }
-    const newWordMean: WordMean = { ...wordMean, [Date.now()]: { word, mean } };
+    const newWordMean: WordMean = {
+      ...wordMean,
+      [Date.now()]: { word, mean, wordPress: false, meanPress: false },
+    };
     setWordMean(newWordMean);
     await saveWordMean(newWordMean);
     setWord('');
@@ -63,6 +59,17 @@ export default function Word() {
         },
       },
     ]);
+  };
+
+  const toggleWord = (key: string) => {
+    const toggledWord: WordMean = { ...wordMean };
+    toggledWord[key].wordPress = !toggledWord[key].wordPress;
+    setWordMean(toggledWord);
+  };
+  const toggleMean = (key: string) => {
+    const toggledMean: WordMean = { ...wordMean };
+    toggledMean[key].meanPress = !toggledMean[key].meanPress;
+    setWordMean(toggledMean);
   };
   useEffect(() => {
     loadWordMean();
@@ -91,11 +98,25 @@ export default function Word() {
       <ScrollView style={scrollstyles.container}>
         {Object.keys(wordMean).map((key) => (
           <View style={scrollstyles.wordbox} key={key}>
-            <TouchableOpacity style={scrollstyles.word}>
-              <Text style={scrollstyles.wordText}>{wordMean[key].word}</Text>
+            <TouchableOpacity style={scrollstyles.word} onPress={() => toggleWord(key)}>
+              <Text
+                style={{
+                  ...scrollstyles.wordText,
+                  color: wordMean[key].wordPress ? theme.color3 : theme.color1,
+                }}
+              >
+                {wordMean[key].word}
+              </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={scrollstyles.word}>
-              <Text style={scrollstyles.wordText}>{wordMean[key].mean}</Text>
+            <TouchableOpacity style={scrollstyles.word} onPress={() => toggleMean(key)}>
+              <Text
+                style={{
+                  ...scrollstyles.wordText,
+                  color: wordMean[key].meanPress ? theme.color3 : theme.color1,
+                }}
+              >
+                {wordMean[key].mean}
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={scrollstyles.delete}
@@ -111,50 +132,3 @@ export default function Word() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'space-between',
-  },
-  form: { flexDirection: 'row', marginBottom: 10 },
-  input: {
-    flex: 4,
-    backgroundColor: theme.color2,
-    marginHorizontal: 5,
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    borderRadius: 15,
-    fontSize: 18,
-  },
-  button: {
-    backgroundColor: theme.color3,
-    flex: 2,
-    marginLeft: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 15,
-  },
-  buttonText: { color: theme.color1, fontWeight: '700' },
-});
-
-const scrollstyles = StyleSheet.create({
-  container: {},
-  wordbox: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 10,
-    backgroundColor: theme.color3,
-    marginTop: 10,
-    borderRadius: 10,
-  },
-  word: {
-    flex: 4,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  delete: {
-    flex: 1,
-  },
-  wordText: { fontSize: 30, color: theme.color1, fontWeight: '400' },
-});
