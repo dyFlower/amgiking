@@ -3,7 +3,7 @@ import { TextInput, TouchableOpacity, View, Text, ScrollView, Alert } from 'reac
 import { Fontisto } from '@expo/vector-icons';
 
 import { theme } from '../../styles/color';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { styles, scrollstyles } from './styles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -71,6 +71,14 @@ export default function Word() {
     toggledMean[key].meanPress = !toggledMean[key].meanPress;
     setWordMean(toggledMean);
   };
+
+  const inputRef = useRef(null);
+
+  const nextInput = (nextInputRef: any) => {
+    if (nextInputRef.current) {
+      nextInputRef.current.focus();
+    }
+  };
   useEffect(() => {
     loadWordMean();
   }, []);
@@ -81,16 +89,19 @@ export default function Word() {
           style={styles.input}
           onChangeText={onChangeWord}
           returnKeyType='next'
+          onSubmitEditing={() => nextInput(inputRef)}
           value={word}
           placeholder='단어'
-        ></TextInput>
+        />
         <TextInput
           style={styles.input}
           onChangeText={onChangeMean}
-          returnKeyType='next'
+          onSubmitEditing={addWordMean}
+          returnKeyType='done'
           value={mean}
+          ref={inputRef}
           placeholder='뜻'
-        ></TextInput>
+        />
         <TouchableOpacity style={styles.button} onPress={addWordMean}>
           <Text style={styles.buttonText}>확인</Text>
         </TouchableOpacity>
