@@ -1,74 +1,112 @@
-import { StyleSheet, TextInput, TouchableOpacity, View, Text, ScrollView } from 'react-native';
+import {
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View,
+  Text,
+  ScrollView,
+  Alert,
+} from 'react-native';
+
 import { Fontisto } from '@expo/vector-icons';
 
 import { theme } from '../../styles/color';
+import { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+interface WordMean {
+  [key: string]: { word: string; mean: string };
+}
 
 export default function Word() {
+  const [word, setWord] = useState('');
+  const [mean, setMean] = useState('');
+  const [wordMean, setWordMean] = useState<WordMean>({});
+
+  const STORAGE_KEY = '@words';
+
+  const onChangeWord = (payload: string) => {
+    setWord(payload);
+  };
+  const onChangeMean = (payload: string) => {
+    setMean(payload);
+  };
+  const saveWordMean = async (toSave: WordMean) => {
+    const s = JSON.stringify(toSave);
+    await AsyncStorage.setItem(STORAGE_KEY, s);
+  };
+  const loadWordMean = async () => {
+    const s = await AsyncStorage.getItem(STORAGE_KEY);
+    s !== null ? setWordMean(JSON.parse(s)) : null;
+  };
+  const addWordMean = async () => {
+    if (word === '' || mean === '') {
+      return;
+    }
+    const newWordMean: WordMean = { ...wordMean, [Date.now()]: { word, mean } };
+    setWordMean(newWordMean);
+    await saveWordMean(newWordMean);
+    setWord('');
+    setMean('');
+  };
+  const deleteWordMean = (key: string) => {
+    Alert.alert('Delete', '정말로 삭제하시겠습니까?', [
+      { text: '취소' },
+      {
+        text: '확인',
+        style: 'destructive',
+        onPress: async () => {
+          const newWordMean: WordMean = { ...wordMean };
+          delete newWordMean[key];
+          setWordMean(newWordMean);
+          await saveWordMean(newWordMean);
+        },
+      },
+    ]);
+  };
+  useEffect(() => {
+    loadWordMean();
+  }, []);
   return (
     <View style={styles.container}>
       <View style={styles.form}>
-        <TextInput style={styles.input} placeholder='단어'></TextInput>
-        <TextInput placeholder='뜻' style={styles.input}></TextInput>
-        <TouchableOpacity style={styles.button}>
+        <TextInput
+          style={styles.input}
+          onChangeText={onChangeWord}
+          returnKeyType='next'
+          value={word}
+          placeholder='단어'
+        ></TextInput>
+        <TextInput
+          style={styles.input}
+          onChangeText={onChangeMean}
+          returnKeyType='next'
+          value={mean}
+          placeholder='뜻'
+        ></TextInput>
+        <TouchableOpacity style={styles.button} onPress={addWordMean}>
           <Text style={styles.buttonText}>확인</Text>
         </TouchableOpacity>
       </View>
       <ScrollView style={scrollstyles.container}>
-        <View style={scrollstyles.wordbox}>
-          <TouchableOpacity style={scrollstyles.word}>
-            <Text style={scrollstyles.wordText}>Apple</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={scrollstyles.word}>
-            <Text style={scrollstyles.wordText}>사과</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={scrollstyles.delete}>
-            <Fontisto name='trash' size={25} color={theme.color4} />
-          </TouchableOpacity>
-        </View>
-        <View style={scrollstyles.wordbox}>
-          <TouchableOpacity style={scrollstyles.word}>
-            <Text style={scrollstyles.wordText}>Banana</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={scrollstyles.word}>
-            <Text style={scrollstyles.wordText}>바나나</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={scrollstyles.delete}>
-            <Fontisto name='trash' size={25} color={theme.color4} />
-          </TouchableOpacity>
-        </View>
-        <View style={scrollstyles.wordbox}>
-          <TouchableOpacity style={scrollstyles.word}>
-            <Text style={scrollstyles.wordText}>Orange</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={scrollstyles.word}>
-            <Text style={scrollstyles.wordText}>오렌지</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={scrollstyles.delete}>
-            <Fontisto name='trash' size={25} color={theme.color4} />
-          </TouchableOpacity>
-        </View>
-        <View style={scrollstyles.wordbox}>
-          <TouchableOpacity style={scrollstyles.word}>
-            <Text style={scrollstyles.wordText}>fun</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={scrollstyles.word}>
-            <Text style={scrollstyles.wordText}>즐겁다</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={scrollstyles.delete}>
-            <Fontisto name='trash' size={25} color={theme.color4} />
-          </TouchableOpacity>
-        </View>
-        <View style={scrollstyles.wordbox}>
-          <TouchableOpacity style={scrollstyles.word}>
-            <Text style={scrollstyles.wordText}>아아아아아아아</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={scrollstyles.word}>
-            <Text style={scrollstyles.wordText}>아아아아아아아아</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={scrollstyles.delete}>
-            <Fontisto name='trash' size={25} color={theme.color4} />
-          </TouchableOpacity>
-        </View>
+        {Object.keys(wordMean).map((key) => (
+          <View style={scrollstyles.wordbox} key={key}>
+            <TouchableOpacity style={scrollstyles.word}>
+              <Text style={scrollstyles.wordText}>{wordMean[key].word}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={scrollstyles.word}>
+              <Text style={scrollstyles.wordText}>{wordMean[key].mean}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={scrollstyles.delete}
+              onPress={() => {
+                deleteWordMean(key);
+              }}
+            >
+              <Fontisto name='trash' size={25} color={theme.color4} />
+            </TouchableOpacity>
+          </View>
+        ))}
       </ScrollView>
     </View>
   );
@@ -112,13 +150,11 @@ const scrollstyles = StyleSheet.create({
   },
   word: {
     flex: 4,
-    // backgroundColor: 'green',
     justifyContent: 'center',
     alignItems: 'center',
   },
   delete: {
     flex: 1,
-    // backgroundColor: 'purple'
   },
   wordText: { fontSize: 30, color: theme.color1, fontWeight: '400' },
 });
