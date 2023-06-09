@@ -51,6 +51,9 @@ export default function Sentence() {
   const compareText1 = text1.split('');
   const compareText2 = text2.split('');
 
+  const answerLength = compareText2.length;
+  const editAnswer = [...compareText1].slice(0, answerLength).join('');
+
   return (
     <View style={styles.container}>
       {!hide && (
@@ -105,16 +108,16 @@ export default function Sentence() {
       </View>
       <View style={styles.footer}>
         <TouchableOpacity style={styles.footerBtn} onPress={handleHide}>
-          <Fontisto name='eye' size={25} color={theme.color1} />
+          <Fontisto name='eye' size={20} color={theme.color1} />
           <Text style={styles.footerText}>{hide ? '보이기' : '숨기기'}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.footerBtn} onPress={deleteSentence}>
-          <Fontisto name='trash' size={25} color={theme.color1} />
+          <Fontisto name='trash' size={20} color={theme.color1} />
           <Text style={styles.footerText}>본문 지우기</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.footerBtn}>
-          <Fontisto name='mic' size={25} color={theme.color1} />
-          <Text style={styles.footerText}>음성 입력</Text>
+        <TouchableOpacity style={styles.footerBtn} onPress={() => setText2(editAnswer)}>
+          <Fontisto name='bell-alt' size={20} color={theme.color1} />
+          <Text style={styles.footerText}>답으로 수정</Text>
         </TouchableOpacity>
       </View>
     </View>
