@@ -48,6 +48,9 @@ export default function Sentence() {
     loadSentence();
   }, []);
 
+  const compareText1 = text1.split('');
+  const compareText2 = text2.split('');
+
   return (
     <View style={styles.container}>
       {!hide && (
@@ -90,6 +93,13 @@ export default function Sentence() {
       <View style={styles.form3}>
         <ScrollView style={{ borderRadius: 10 }}>
           <Text style={styles.monitor}>
+            {compareText2.map((_, i) =>
+              compareText1[i] === compareText2[i] ? (
+                <Text style={{ color: theme.color4 }}>{compareText2[i]}</Text>
+              ) : (
+                <Text style={{ color: 'red' }}>{compareText2[i]}</Text>
+              ),
+            )}
           </Text>
         </ScrollView>
       </View>

@@ -8,7 +8,6 @@ export const styles = StyleSheet.create({
     paddingLeft: 7,
     borderRadius: 10,
     fontSize: 30,
-    backgroundColor: theme.color2,
     color: theme.color4,
   },
   input2: {
@@ -27,8 +26,6 @@ export const styles = StyleSheet.create({
   monitor: {
     paddingLeft: 7,
     fontSize: 30,
-    backgroundColor: theme.color2,
-    color: theme.color4,
   },
   footer: {
     flexDirection: 'row',
