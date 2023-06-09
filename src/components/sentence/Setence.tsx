@@ -31,7 +31,10 @@ export default function Sentence() {
     }
   };
 
-  const deleteSentence = async () => {};
+  const deleteSentence = async () => {
+    setText1('');
+    await AsyncStorage.removeItem(STORAGE_KEY);
+  };
   const handleHide = () => {
     setHide(!hide);
   };
