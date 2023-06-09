@@ -23,10 +23,10 @@ export const styles = StyleSheet.create({
   },
   footerBtn: {
     flexDirection: 'row',
-    width: '50%',
+    width: '33%',
     justifyContent: 'center',
     alignItems: 'center',
     paddingBottom: 30,
   },
-  footerText: { marginLeft: 5, fontSize: 25, color: theme.color1 },
+  footerText: { marginLeft: 5, fontSize: 20, color: theme.color1 },
 });
