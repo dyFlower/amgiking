@@ -2,13 +2,18 @@ import { TextInput, View, Text, ScrollView, TouchableOpacity, Keyboard, Alert } 
 import { Fontisto } from '@expo/vector-icons';
 import { styles } from './styles';
 import { theme } from '../../styles/color';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Sentence() {
   const [text1, setText1] = useState('');
   const [text2, setText2] = useState('');
   const [hide, setHide] = useState(false);
+  const inputRef = useRef<TextInput>(null);
+
+  const handleViewTouch = () => {
+    if (inputRef.current) inputRef.current.focus();
+  };
 
   const STORAGE_KEY = '@sentence';
 
@@ -46,27 +51,30 @@ export default function Sentence() {
   return (
     <View style={styles.container}>
       {!hide && (
-        <ScrollView contentContainerStyle={styles.form} scrollEnabled={false}>
-          <TextInput
-            style={styles.input}
-            value={text1}
-            onChangeText={handleText1Change}
-            returnKeyType='done'
-            onEndEditing={saveSentence}
-            onKeyPress={({ nativeEvent }) => {
-              if (nativeEvent.key === 'Enter') {
-                Keyboard.dismiss();
-                saveSentence();
-              }
-            }}
-            multiline={true}
-            placeholder='암기할 문장을 작성해주세요.'
-          />
-        </ScrollView>
+        <TouchableOpacity style={styles.form1} onPress={handleViewTouch} activeOpacity={1}>
+          <ScrollView>
+            <TextInput
+              style={styles.input1}
+              value={text1}
+              onChangeText={handleText1Change}
+              returnKeyType='done'
+              onEndEditing={saveSentence}
+              onKeyPress={({ nativeEvent }) => {
+                if (nativeEvent.key === 'Enter') {
+                  Keyboard.dismiss();
+                  saveSentence();
+                }
+              }}
+              multiline={true}
+              placeholder='암기할 문장을 작성해주세요.'
+              ref={inputRef}
+            />
+          </ScrollView>
+        </TouchableOpacity>
       )}
-      <ScrollView contentContainerStyle={styles.form} scrollEnabled={false}>
+      <View>
         <TextInput
-          style={{ ...styles.input, backgroundColor: theme.color2 }}
+          style={styles.input2}
           value={text2}
           onChangeText={handleText2Change}
           returnKeyType='done'
@@ -75,10 +83,16 @@ export default function Sentence() {
               Keyboard.dismiss();
             }
           }}
-          multiline={true}
+          multiline={false}
           placeholder='암기한 문장을 확인하세요.'
         />
-      </ScrollView>
+      </View>
+      <View style={styles.form3}>
+        <ScrollView style={{ borderRadius: 10 }}>
+          <Text style={styles.monitor}>
+          </Text>
+        </ScrollView>
+      </View>
       <View style={styles.footer}>
         <TouchableOpacity style={styles.footerBtn} onPress={handleHide}>
           <Fontisto name='eye' size={25} color={theme.color1} />

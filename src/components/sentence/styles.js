@@ -2,24 +2,37 @@ import { theme } from '../../styles/color';
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  form: {
-    flex: 1,
-    marginBottom: 10,
-  },
-  input: {
-    flex: 1,
-    paddingLeft: 10,
+  container: { flex: 1, gap: 5 },
+  form1: { backgroundColor: theme.color2, flexBasis: '35%', borderRadius: 10 },
+  input1: {
+    paddingLeft: 7,
     borderRadius: 10,
+    fontSize: 30,
+    backgroundColor: theme.color2,
+    color: theme.color4,
+  },
+  input2: {
+    paddingLeft: 7,
+    borderRadius: 10,
+    fontSize: 30,
+    backgroundColor: theme.color1,
+    color: theme.color4,
+  },
+  form3: {
+    backgroundColor: theme.color2,
+    borderRadius: 10,
+    flexBasis: '50%',
+    flexGrow: 1,
+  },
+  monitor: {
+    paddingLeft: 7,
     fontSize: 30,
     backgroundColor: theme.color2,
     color: theme.color4,
   },
   footer: {
     flexDirection: 'row',
-    height: '10%',
+    flexba: '10%',
   },
   footerBtn: {
     flexDirection: 'row',
