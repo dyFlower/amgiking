@@ -72,7 +72,7 @@ export default function Word() {
 
   const inputRef = useRef(null);
 
-  const nextInput = (nextInputRef: any) => {
+  const nextInput = (nextInputRef: React.RefObject<HTMLInputElement>) => {
     if (nextInputRef.current) {
       nextInputRef.current.focus();
     }
