@@ -37,8 +37,17 @@ export default function Sentence() {
   };
 
   const deleteSentence = async () => {
-    setText1('');
-    await AsyncStorage.removeItem(STORAGE_KEY);
+    Alert.alert('Delete', '정말로 삭제하시겠습니까?', [
+      { text: '취소' },
+      {
+        text: '확인',
+        style: 'destructive',
+        onPress: async () => {
+          setText1('');
+          await AsyncStorage.removeItem(STORAGE_KEY);
+        },
+      },
+    ]);
   };
   const handleHide = () => {
     setHide(!hide);
