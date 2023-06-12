@@ -15,8 +15,7 @@
 
 ## <a id="스택">사용 기술</a>
 
-<img src="https://img.shields.io/badge/React_native-61DAFB?style=for-the-badge&logo=기술스택아이콘&logoColor=white"/>
-<img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=기술스택아이콘&logoColor=white"/><img src="https://img.shields.io/badge/Expo-000020?style=for-the-badge&logo=기술스택아이콘&logoColor=white"/>
+<img src="https://img.shields.io/badge/React_native-61DAFB?style=for-the-badge&logo=react&logoColor=white"/><img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white"/><img src="https://img.shields.io/badge/Expo-000020?style=for-the-badge&logo=expo&logoColor=white"/>
 
 ## <a id="주요기능">주요 기능</a>
 
