@@ -107,9 +107,13 @@ export default function Sentence() {
           <Text style={styles.monitor}>
             {compareText2.map((_, i) =>
               compareText1[i] === compareText2[i] ? (
-                <Text style={{ color: theme.color4 }}>{compareText2[i]}</Text>
+                <Text key={i} style={{ color: theme.color4 }}>
+                  {compareText2[i]}
+                </Text>
               ) : (
-                <Text style={{ color: 'red' }}>{compareText2[i]}</Text>
+                <Text key={i} style={{ color: 'red' }}>
+                  {compareText2[i]}
+                </Text>
               ),
             )}
           </Text>
